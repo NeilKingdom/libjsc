@@ -7,17 +7,14 @@
         |__/
 </pre>
 
-☦️ This software was written in the name of the __Father__ and of the __Son__ and of the __Holy Spirit__; Amen.
+✝️ This software was written in the name of the __Father__ and of the __Son__ and of the __Holy Spirit__; Amen.
 
-About
-===
+# About
 libjsc is a library for marshalling C structs into JSON and unmarshalling JSON into C structs. It accomplishes
 this by creating an Abstract Syntax Tree (AST) which can then be traversed as a collection of nodes.
 
-Dependencies
-===
+# Dependencies
 This library depends on my data structures library for C: libdsc.
 
-Installation
-===
+# Installation
 TODO: Add notes on installation
