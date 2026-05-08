@@ -3,16 +3,16 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
-
-#ifdef gcc
 #endif
 
-#ifdef clang
-#endif
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+#include <ctype.h>
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif
 
-#endif /* JSC_COMMON */
+#endif

@@ -1,0 +1,8 @@
+{
+    "data1" : "value1",
+    "data2" : true,
+    "data3" : {
+        "data4" : 123456
+        "data5" : [ "arr1", null, "arr3" ]
+    }
+}
