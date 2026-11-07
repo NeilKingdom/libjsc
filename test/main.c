@@ -1,8 +1,8 @@
-#include "parser.h"
-#include "lexer.h"
+#include "../include/parser.h"
+#include "../include/lexer.h"
 
 int main(void) {
-    //parse_json("./test_data.json");
+    parse_json("./test_data.json");
 
     TokenType_t tokens[8] = {
         JSC_LCB,

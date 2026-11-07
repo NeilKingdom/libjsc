@@ -1,6 +1,6 @@
 #!/bin/sh
 
-gcc -I../include -c ../src/parser.c -o ../obj/parser.o -ggdb -DDEBUG
-gcc -I../include -c ../src/lexer.c -o ../obj/lexer.o -ggdb -DDEBUG
-gcc -I../include -c main.c -o ../obj/main.o -ggdb -DDEBUG
-gcc ../obj/main.o ../obj/parser.o ../obj/lexer.o -o test
+gcc -I../include -I../lib/ezc/include -c ../src/parser.c -o ../build/obj/parser.o -ggdb -DDEBUG
+gcc -I../include -I../lib/ezc/include -c ../src/lexer.c -o ../build/obj/lexer.o -ggdb -DDEBUG
+gcc -I../include -I../lib/ezc/include -c main.c -o ../build/obj/main.o -ggdb -DDEBUG
+gcc ../build/obj/main.o ../build/obj/parser.o ../build/obj/lexer.o -o test

@@ -1,52 +1,63 @@
-CC = gcc
+CC := gcc
 PROFILE ?= DEBUG
-
-CCFLAGS_DEBUG = -ggdb -O0 -fno-builtin -DDEBUG
-CCFLAGS_DEBUG = -Ofast
 
 SRC_DIR := src
 INC_DIR := include
-OBJ_DIR := obj
-BIN_DIR := bin
-TEST_DIR := test
+OBJ_DIR := build/obj
+TGT_DIR := build/target
 
-TGT_INC_DIR := /usr/include
-TGT_BIN_DIR := /usr/lib
+TGT_INC_DIR := /usr/include/jsc
+TGT_LIB_DIR := /usr/lib/jsc
 
 SRCS := $(wildcard $(SRC_DIR)/*.c)
-DEPS := $(wildcard $(INC_DIR)/*.h)
 OBJS := $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 
-CCFLAGS += $(CCFLAGS_$(PROFILE)) -I$(INC_DIR) -std=c99 -Wall -Wextra
-LDFLAGS += -lc
+CFLAGS_DEBUG := -ggdb -O0 -fno-builtin -DDEBUG
+CFLAGS_DEBUG := -O2
 
-BINS := $(BIN_DIR)/libjsc.a $(BIN_DIR)/libjsc.so
+INCLUDES += -I$(INC_DIR) -Ilib/ezc/include
+CFLAGS += $(CFLAGS_$(PROFILE)) -std=c99 -Wall -Wextra -fPIC
 
-all: prebuild $(BINS)
+LIBS := $(TGT_DIR)/libjsc.a $(TGT_DIR)/libjsc.so
 
-install: all
-	cp $(BINS) $(TGT_BIN_DIR)
-	cp $(INC_DIR)/*.h $(TGT_INC_DIR)
+# Default goal
+all: $(LIBS)
 
-prebuild:
-	mkdir -p $(OBJ_DIR)
-	mkdir -p $(BIN_DIR)
-
+# Clean obj files and libs
 clean:
-	rm -rf $(OBJ_DIR)/*.o $(BIN_DIR)/*
+	rm -rf $(OBJ_DIR)/*
+	rm -rf $(TGT_DIR)/*
 
+# Clean -> build
 rebuild: clean all
 
-$(BIN_DIR)/libjsc.a: $(OBJS)
+# Create dependent build directories
+prebuild:
+	mkdir -p $(OBJ_DIR)
+	mkdir -p $(TGT_DIR)
+
+install: all
+	install -d $(TGT_INC_DIR)
+	install -d $(TGT_LIB_DIR)
+	install -m644 $(INC_DIR)/*.h $(TGT_INC_DIR)
+	install -m644 $(TGT_DIR)/libimc.a $(TGT_LIB_DIR)
+	install -m755 $(TGT_DIR)/libimc.so $(TGT_LIB_DIR)
+
+# Remove installed headers/libraries
+uninstall:
+	rm -rf $(TGT_INC_DIR)
+	rm -rf $(TGT_LIB_DIR)
+
+# Compile static library
+$(TGT_DIR)/libjsc.a: $(OBJS)
 	ar rcs $@ $^
 
-$(BIN_DIR)/libjsc.so: $(SRCS) $(DEPS)
-	$(CC) -o $@ $(SRCS) $(DEPS) -shared -fPIC $(CCFLAGS) $(LDFLAGS)
-ifeq ($(PROFILE), RELEASE)
-	strip ./bin/libjsc.so
-endif
+# Compile dynamic library
+$(TGT_DIR)/libjsc.so: $(OBJS)
+	$(CC) -shared -o $@ $^ $(LDFLAGS)
 
-$(OBJ_DIR)/%.o: $(SRCS)
-	$(CC) -c $< -o $@ $(CCFLAGS)
+# Intermediate obj files
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | prebuild
+	$(CC) $(INCLUDES) $(CFLAGS) -c $< -o $@
 
-.PHONY: all install clean rebuild test
+.PHONY: all clean rebuild prebuild install uninstall

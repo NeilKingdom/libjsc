@@ -1,7 +1,3 @@
-#ifndef _POSIX_SOURCE
-#define _POSIX_SOURCE
-#endif
-
 #include "parser.h"
 #include <sys/stat.h>
 
